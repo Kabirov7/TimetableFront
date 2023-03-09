@@ -20,13 +20,13 @@ class MainActivity : ComponentActivity() {
 
         var week = Week(
             listOf(
-                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "06", "Пн", "марта"),
-                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "07", "Вт", "марта"),
-                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "08", "Ср", "марта"),
-                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "09", "Чт", "марта"),
-                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "10", "Пт", "марта"),
-                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "11", "Сб", "марта"),
-                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "12", "Вс", "марта")
+                Day(listOf(Lesson("12:40", "Лолов Л.Л.", "Высшая математика","Лекция","246*")), "06", "Пн", "марта"),
+                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "07", "Вт", "марта"),
+                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "08", "Ср", "марта"),
+                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "09", "Чт", "марта"),
+                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "10", "Пт", "марта"),
+                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "11", "Сб", "марта"),
+                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "12", "Вс", "марта")
             ),
             typeOfWeek = "Четная"
         )
