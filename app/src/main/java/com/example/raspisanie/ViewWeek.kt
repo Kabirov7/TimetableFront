@@ -17,7 +17,9 @@ fun ViewWeek(item: Week)
 {
     Row(
         modifier = Modifier
-            .padding(vertical = 20.dp)
+            .padding(vertical = 25.dp, horizontal = 10.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
 
     ) {
 
@@ -28,73 +30,195 @@ fun ViewWeek(item: Week)
                 onClick = {
                 },
                 modifier = Modifier
-                    .height(60.dp)
-                    .width(60.dp)
+                    .size(55.dp)
             ) {
                 Text(
                     text = item.list[i].date
                 )
             }
     }
+Row(
+    //modifier = Modifier.horizontalScroll(rememberScrollState())
+) {
+        Column(
+            modifier = Modifier
+                .padding(vertical = 100.dp, horizontal = 10.dp)
+                .verticalScroll(
+                    rememberScrollState()
+                ),
+        ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
 
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp
+            ) {
+
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
+
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
+
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
+
+            }
+        }
     Column(
-        modifier = Modifier
-            .padding(vertical = 100.dp, horizontal = 10.dp)
-            .verticalScroll(
-                rememberScrollState()
-            ),
-    ) {
-        Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp)
-                .padding(vertical = 5.dp),
-            shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
+                .padding(vertical = 100.dp, horizontal = 10.dp)
+                .verticalScroll(
+                    rememberScrollState()
+                )
         ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
 
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp
+            ) {
+
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
+
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
+
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
+
+            }
         }
-        Card(
+    Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp)
-                .padding(vertical = 5.dp),
-            shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp
+                .padding(vertical = 100.dp, horizontal = 10.dp)
+                .verticalScroll(
+                    rememberScrollState()
+                ),
         ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
 
-        }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp)
-                .padding(vertical = 5.dp),
-            shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-        ) {
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp
+            ) {
 
-        }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp)
-                .padding(vertical = 5.dp),
-            shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-        ) {
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
 
-        }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp)
-                .padding(vertical = 5.dp),
-            shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-        ) {
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
 
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+                    .padding(vertical = 5.dp),
+                shape = RoundedCornerShape(15.dp),
+                elevation = 6.dp,
+            ) {
+
+            }
         }
-    }
+
+
+
+}
+
 
 
 }
