@@ -1,0 +1,11 @@
+R_DEF: Internal format may change without notice
+local
+attr? deselection
+attr? futureDaysCount
+attr? includeCurrentDate
+attr? initialPositionIndex
+attr? longPress
+attr? multiSelection
+attr? pastDaysCount
+string app_name
+styleable SingleRowCalendar pastDaysCount futureDaysCount includeCurrentDate initialPositionIndex multiSelection deselection longPress
