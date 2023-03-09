@@ -26,13 +26,13 @@ import com.example.raspisanie.ui.theme.Orrrange
 @Composable
 fun ViewWeek(item: Week)
 {
-// Фон
+//// Фон
 //    Image(
-//        painter = painterResource(id = R.drawable.fon2),
+//        painter = painterResource(id = R.drawable.fon3),
 //        contentDescription = null,
 //        modifier = Modifier
 //            .fillMaxSize(),
-//        contentScale = ContentScale.FillHeight
+//        contentScale = ContentScale.FillBounds
 //    )
 
 
@@ -52,11 +52,21 @@ fun ViewWeek(item: Week)
                 onClick = {
                 },
                 modifier = Modifier
-                    .size(55.dp).border(width = 1.dp,Color.DarkGray, shape = CircleShape)
+                    .size(55.dp)
+                    .border(width = 1.dp, Color.DarkGray, shape = CircleShape)
             ) {
-                Text(
-                    text = item.list[i].date
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceAround,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = item.list[i].date
+                    )
+                    Text(text = item.list[i].dayOfWeek)
+                }
+
             }
     }
 
@@ -84,7 +94,7 @@ fun ViewWeek(item: Week)
                         modifier = Modifier
                             .fillMaxWidth(0.2f)
                             .fillMaxHeight()
-                            .border(width = 0.5.dp,Color.DarkGray)
+                            .border(width = 0.5.dp, Color.DarkGray)
                             .background(Blueee),
                         verticalArrangement = Arrangement.SpaceAround,
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -121,7 +131,7 @@ fun ViewWeek(item: Week)
                         modifier = Modifier
                             .fillMaxWidth(0.2f)
                             .fillMaxHeight()
-                            .border(width = 0.5.dp,Color.DarkGray)
+                            .border(width = 0.5.dp, Color.DarkGray)
                             .background(Orrrange),
                         verticalArrangement = Arrangement.SpaceAround,
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -158,7 +168,7 @@ fun ViewWeek(item: Week)
                         modifier = Modifier
                             .fillMaxWidth(0.2f)
                             .fillMaxHeight()
-                            .border(width = 0.5.dp,Color.DarkGray)
+                            .border(width = 0.5.dp, Color.DarkGray)
                             .background(Blueee),
                         verticalArrangement = Arrangement.SpaceAround,
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -195,7 +205,7 @@ fun ViewWeek(item: Week)
                         modifier = Modifier
                             .fillMaxWidth(0.2f)
                             .fillMaxHeight()
-                            .border(width = 0.5.dp,Color.DarkGray)
+                            .border(width = 0.5.dp, Color.DarkGray)
                             .background(Orrrange),
                         verticalArrangement = Arrangement.SpaceAround,
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -232,7 +242,7 @@ fun ViewWeek(item: Week)
                         modifier = Modifier
                             .fillMaxWidth(0.2f)
                             .fillMaxHeight()
-                            .border(width = 0.5.dp,Color.DarkGray)
+                            .border(width = 0.5.dp, Color.DarkGray)
                             .background(Blueee),
                         verticalArrangement = Arrangement.SpaceAround,
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -269,7 +279,7 @@ fun ViewWeek(item: Week)
                         modifier = Modifier
                             .fillMaxWidth(0.2f)
                             .fillMaxHeight()
-                            .border(width = 0.5.dp,Color.DarkGray)
+                            .border(width = 0.5.dp, Color.DarkGray)
                             .background(Orrrange),
                         verticalArrangement = Arrangement.SpaceAround,
                         horizontalAlignment = Alignment.CenterHorizontally

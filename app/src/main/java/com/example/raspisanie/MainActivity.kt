@@ -27,7 +27,8 @@ class MainActivity : ComponentActivity() {
                 Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "10", "Пт", "марта"),
                 Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "11", "Сб", "марта"),
                 Day(listOf(Lesson("12:40", "Lolov", "Math","Lection")), "12", "Вс", "марта")
-            )
+            ),
+            typeOfWeek = "Четная"
         )
 
         super.onCreate(savedInstanceState)

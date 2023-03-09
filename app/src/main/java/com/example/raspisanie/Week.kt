@@ -4,7 +4,8 @@ import java.time.DayOfWeek
 import java.time.Month
 
 data class Week(
-    var list: List<Day>
+    var list: List<Day>,
+    var typeOfWeek: String
 )
 
 data class Day(
