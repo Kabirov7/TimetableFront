@@ -56,7 +56,6 @@ modifier = Modifier.fillMaxSize()
                 },
                 modifier = Modifier
                     .size(55.dp)
-                    .border(width = 1.dp, Color.DarkGray, shape = CircleShape)
             ) {
                 Column(
                     modifier = Modifier
@@ -88,8 +87,7 @@ modifier = Modifier.fillMaxSize()
                 .height(160.dp)
                 .padding(vertical = 5.dp),
             shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-            border = BorderStroke(3.dp,Blueee)
+            elevation = 20.dp,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -190,8 +188,7 @@ modifier = Modifier.fillMaxSize()
                 .height(160.dp)
                 .padding(vertical = 5.dp),
             shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-            border = BorderStroke(3.dp,Blueee)
+            elevation = 20.dp,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -292,8 +289,7 @@ modifier = Modifier.fillMaxSize()
                 .height(160.dp)
                 .padding(vertical = 5.dp),
             shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-            border = BorderStroke(3.dp,Blueee)
+            elevation = 20.dp,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -394,8 +390,7 @@ modifier = Modifier.fillMaxSize()
                 .height(160.dp)
                 .padding(vertical = 5.dp),
             shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-            border = BorderStroke(3.dp,Blueee)
+            elevation = 20.dp,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -496,8 +491,7 @@ modifier = Modifier.fillMaxSize()
                 .height(160.dp)
                 .padding(vertical = 5.dp),
             shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-            border = BorderStroke(3.dp,Blueee)
+            elevation = 20.dp,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -598,8 +592,7 @@ modifier = Modifier.fillMaxSize()
                 .height(160.dp)
                 .padding(vertical = 5.dp),
             shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-            border = BorderStroke(3.dp,Blueee)
+            elevation = 20.dp,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -694,108 +687,7 @@ modifier = Modifier.fillMaxSize()
 
             }
         }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp)
-                .padding(vertical = 5.dp),
-            shape = RoundedCornerShape(15.dp),
-            elevation = 6.dp,
-            border = BorderStroke(3.dp,Blueee)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
 
-                // Время пары
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(0.2f)
-                        .fillMaxHeight()
-                        .border(width = 0.5.dp, Color.DarkGray)
-                        .background(Blueee),
-                    verticalArrangement = Arrangement.SpaceAround,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = item.list[0].listOfLessons[0].time,
-                        fontSize = 20.sp,
-                        color = Color.LightGray,
-                    )
-                    Text(
-                        text = "14:10",
-                        fontSize = 20.sp,
-                        color = Color.LightGray
-                    )
-                }
-
-                // Описание пары
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 10.dp),
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.Start
-                ) {
-
-                    Text(
-                        text = item.list[0].listOfLessons[0].typeOfLesson,
-                        fontSize = 15.sp,
-                        color = Color.Gray,
-                        fontFamily = FontFamily.SansSerif
-                    )
-                    Text(
-                        text = item.list[0].listOfLessons[0].discipline,
-                        fontSize = 20.sp,
-                        color = Color.Black,
-                        fontFamily = FontFamily.SansSerif
-                    )
-
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.prepod),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(width = 20.dp, height = 20.dp),
-                            contentScale = ContentScale.Crop
-                        )
-
-                        Text(
-                            text = item.list[0].listOfLessons[0].teacher,
-                            fontSize = 15.sp,
-                            color = Color.Gray,
-                            fontFamily = FontFamily.SansSerif,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
-                    }
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.aud),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(15.dp),
-                        )
-                        Text(
-                            text = item.list[0].listOfLessons[0].auditory,
-                            fontSize = 15.sp,
-                            color = Color.Gray,
-                            fontFamily = FontFamily.SansSerif,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
-                    }
-
-
-
-                }
-
-            }
-        }
     }
 
 }
