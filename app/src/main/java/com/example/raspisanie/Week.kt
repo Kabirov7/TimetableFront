@@ -19,6 +19,7 @@ data class Lesson
     (
     var time: String,
     var teacher: String,
-    var discipline: String
+    var discipline: String,
+    var typeOfLesson: String
 )
 
