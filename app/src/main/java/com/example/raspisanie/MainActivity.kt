@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
                 Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "09", "Чт", "марта"),
                 Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "10", "Пт", "марта"),
                 Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "11", "Сб", "марта"),
-                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "12", "Вс", "марта")
+                Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "12", "Вс", "марта"),
             ),
             typeOfWeek = "Четная"
         )
