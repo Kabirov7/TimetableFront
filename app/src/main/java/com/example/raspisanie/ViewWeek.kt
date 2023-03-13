@@ -34,8 +34,10 @@ import com.example.raspisanie.ui.theme.Orrrange
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.mrerror.singleRowCalendar.SingleRowCalendar
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
+import kotlinx.coroutines.launch
 import java.util.*
 
 @OptIn(ExperimentalSnapperApi::class, ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
@@ -73,7 +75,7 @@ modifier = Modifier.fillMaxSize()
 
     val statepage = rememberPagerState(day.day)
 
-    // Линия дней
+    /*// старая линия дней
     Row(
         modifier = Modifier
             .padding(vertical = 25.dp, horizontal = 10.dp)
@@ -104,7 +106,18 @@ modifier = Modifier.fillMaxSize()
                 }
 
             }
-    }
+    }*/
+
+    SingleRowCalendar(onSelectedDayChange = { // верхний календарь
+        day = it
+        coroutineScope.launch {
+            statepage.animateScrollToPage(page = day.day) // анимация при нажатии на день недели календаря
+        }
+
+    },
+        selectedDayBackgroundColor = Blueee
+    )
+
 
     // Колонна карточек с парами
 
