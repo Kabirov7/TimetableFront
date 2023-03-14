@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -44,6 +45,7 @@ import com.mrerror.singleRowCalendar.weekFinalDays
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -76,8 +78,8 @@ modifier = Modifier.fillMaxSize()
         Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "08", "Ср", "марта"),
         Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "09", "Чт", "марта"),
         Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "10", "Пт", "марта"),
-        Day(listOf(Lesson("12:40", "Lolov", "Math","Lection","246*")), "11", "Сб", "марта"),
-        Day(listOf(Lesson("12:40", "Воскресенье", "Math","Lection","246*")), "12", "Вс", "марта"),
+        Day(listOf(), "11", "Сб", "марта"),
+        Day(listOf(), "12", "Вс", "марта"),
     ) // дни недели
 
 
@@ -123,7 +125,7 @@ modifier = Modifier.fillMaxSize()
     }*/
 
     SingleRowCalendar(onSelectedDayChange = { // верхний календарь
-        
+
         day = it
         coroutineScope.launch {
             statepage.animateScrollToPage(
@@ -380,114 +382,158 @@ modifier = Modifier.fillMaxSize()
                 .verticalScroll(
                     state = rememberScrollState()
                 )
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
-
-            for (lesson in items[currentPage].listOfLessons)
+            if (items[currentPage].listOfLessons.isEmpty() && items[currentPage].dayOfWeek == "Сб")
             {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(160.dp)
-                        .padding(vertical = 5.dp, horizontal = 10.dp)
-                        .clickable {},
-                    shape = RoundedCornerShape(15.dp),
-                    elevation = 15.dp,
+                Column(
+
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(vertical = 20.dp).fillMaxSize()
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
+                    Image(
+                        painter = painterResource(id = R.drawable.chill),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .shadow(10.dp, shape = RoundedCornerShape(70.dp))
+                    )
+                    Text(
+                        text = "Пар нема!", fontSize = 25.sp, modifier = Modifier.padding(vertical = 20.dp)
+                    )
+                }
+
+            }
+            else if (items[currentPage].listOfLessons.isEmpty() && items[currentPage].dayOfWeek == "Вс")
+            {
+                Column(
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(vertical = 20.dp).fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.chill1),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .shadow(10.dp, shape = RoundedCornerShape(70.dp))
+                    )
+                    Text(
+                        text = "Пар нема!", fontSize = 25.sp, modifier = Modifier.padding(vertical = 20.dp)
+                    )
+                }
+
+            }
+            else
+            {
+                for (lesson in items[currentPage].listOfLessons)
+                {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(160.dp)
+                            .padding(vertical = 5.dp, horizontal = 10.dp)
+                            .clickable {},
+                        shape = RoundedCornerShape(15.dp),
+                        elevation = 15.dp,
                     ) {
-
-                        // Время пары
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(0.2f)
-                                .fillMaxHeight()
-                                .border(width = 0.5.dp, Color.DarkGray)
-                                .background(Blueee),
-                            verticalArrangement = Arrangement.SpaceAround,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = lesson.time,
-                                fontSize = 20.sp,
-                                color = Color.LightGray,
-                            )
-                            Text(
-                                text = "14:10",
-                                fontSize = 20.sp,
-                                color = Color.LightGray
-                            )
-                        }
-
-                        // Описание пары
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 10.dp),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.Start
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
                         ) {
 
-                            Text(
-                                text = lesson.typeOfLesson,
-                                fontSize = 15.sp,
-                                color = Color.Gray,
-                                fontFamily = FontFamily.SansSerif
-                            )
-                            Text(
-                                text = lesson.discipline,
-                                fontSize = 20.sp,
-                                color = Color.Black,
-                                fontFamily = FontFamily.SansSerif
-                            )
-
-
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween
+                            // Время пары
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.2f)
+                                    .fillMaxHeight()
+                                    .border(width = 0.5.dp, Color.DarkGray)
+                                    .background(Blueee),
+                                verticalArrangement = Arrangement.SpaceAround,
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.prepod),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(width = 20.dp, height = 20.dp),
-                                    contentScale = ContentScale.Crop
-                                )
-
                                 Text(
-                                    text = lesson.teacher,
-                                    fontSize = 15.sp,
-                                    color = Color.Gray,
-                                    fontFamily = FontFamily.SansSerif,
-                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                    text = lesson.time,
+                                    fontSize = 20.sp,
+                                    color = Color.LightGray,
+                                )
+                                Text(
+                                    text = "14:10",
+                                    fontSize = 20.sp,
+                                    color = Color.LightGray
                                 )
                             }
 
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween
+                            // Описание пары
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 10.dp),
+                                verticalArrangement = Arrangement.SpaceEvenly,
+                                horizontalAlignment = Alignment.Start
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.aud),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(15.dp),
-                                )
+
                                 Text(
-                                    text = lesson.auditory,
+                                    text = lesson.typeOfLesson,
                                     fontSize = 15.sp,
                                     color = Color.Gray,
-                                    fontFamily = FontFamily.SansSerif,
-                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                    fontFamily = FontFamily.SansSerif
                                 )
+                                Text(
+                                    text = lesson.discipline,
+                                    fontSize = 20.sp,
+                                    color = Color.Black,
+                                    fontFamily = FontFamily.SansSerif
+                                )
+
+
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.prepod),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(width = 20.dp, height = 20.dp),
+                                        contentScale = ContentScale.Crop
+                                    )
+
+                                    Text(
+                                        text = lesson.teacher,
+                                        fontSize = 15.sp,
+                                        color = Color.Gray,
+                                        fontFamily = FontFamily.SansSerif,
+                                        modifier = Modifier.padding(horizontal = 10.dp)
+                                    )
+                                }
+
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.aud),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(15.dp),
+                                    )
+                                    Text(
+                                        text = lesson.auditory,
+                                        fontSize = 15.sp,
+                                        color = Color.Gray,
+                                        fontFamily = FontFamily.SansSerif,
+                                        modifier = Modifier.padding(horizontal = 10.dp)
+                                    )
+                                }
+
+
+
                             }
 
-
-
                         }
-
                     }
                 }
             }
+
 
 
         }
