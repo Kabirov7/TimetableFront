@@ -2,10 +2,12 @@ package com.example.raspisanie
 
 import android.annotation.SuppressLint
 import android.text.style.UpdateLayout
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 //import androidx.compose.foundation.layout.BoxScopeInstance.align
 //import androidx.compose.foundation.layout.ColumnScopeInstance.align
@@ -19,12 +21,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.lerp
@@ -52,6 +56,7 @@ import kotlin.math.absoluteValue
 
 var stateofpager: Date = Date()
 
+
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalSnapperApi::class, ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
@@ -59,7 +64,8 @@ fun ViewWeek()
 {
 
 Column(
-modifier = Modifier.fillMaxSize()
+modifier = Modifier.fillMaxSize().background(Color.White),
+    verticalArrangement = Arrangement.SpaceBetween
 ) {
 
     val items = listOf(
@@ -104,6 +110,8 @@ modifier = Modifier.fillMaxSize()
             Lesson("10:50", "12:20","Дмитриева А.П.", "ПРАВОВЕДЕНИЕ","Практическое занятие","484"),
             Lesson("12:40", "14:10","Александрова Е.Б", "ВЫСШ.МАТЕМАТ.","Лекция","451"),
             Lesson("14:55", "16:25","Живулин В.А.", "ФИЗИКА","Лекция","325"),
+            Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Лекция","429*"),
+            Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Лекция","429*"),
             Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Лекция","429*"),
         ),  "Ср"),
         Day(listOf(
@@ -487,7 +495,6 @@ modifier = Modifier.fillMaxSize()
         verticalAlignment = Alignment.Top,
         modifier = Modifier
             .weight(10f)
-            .padding(vertical = 20.dp),
     ) { currentPage ->
 
 
@@ -656,6 +663,54 @@ modifier = Modifier.fillMaxSize()
 
 
 
+        }
+    }
+
+    val enabledmenu = remember{ mutableStateOf(0) }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.08f)
+            .border(1.dp, Color.LightGray)
+    ) {
+        Button(
+            onClick = { enabledmenu.value = 0 },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+            elevation = ButtonDefaults.elevation(0.dp,0.dp,0.dp),
+            modifier = Modifier.fillMaxWidth(0.33f)
+        ) {
+            Image(
+                painter = if (enabledmenu.value == 0) painterResource(R.drawable.enabled_home) else painterResource(R.drawable.disabled_home),
+                contentDescription ="",
+                Modifier.padding(8.dp)
+            )
+        }
+
+        Button(
+            onClick = { enabledmenu.value = 1},
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White, disabledBackgroundColor = Color.LightGray),
+            elevation = ButtonDefaults.elevation(0.dp),
+            modifier = Modifier.fillMaxWidth(0.5f)
+        ) {
+            Image(
+                painter = if (enabledmenu.value == 1) painterResource(R.drawable.enabled_search) else painterResource(R.drawable.disabled_search),
+                contentDescription ="",
+                Modifier.padding(8.dp)
+            )
+        }
+        Button(
+            onClick = { enabledmenu.value = 2 },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+            elevation = ButtonDefaults.elevation(0.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Image(
+                painter = if (enabledmenu.value == 2) painterResource(R.drawable.enabled_account) else painterResource(R.drawable.disabled_account),
+                contentDescription ="",
+                Modifier.padding(8.dp)
+            )
         }
     }
 
