@@ -58,16 +58,6 @@ var stateofpager: Date = Date()
 fun ViewWeek()
 {
 
-/*//Фон
-    Image(
-        painter = painterResource(id = R.drawable.fon3),
-        contentDescription = null,
-        modifier = Modifier
-            .fillMaxSize(),
-        contentScale = ContentScale.FillBounds
-    ) // фон*/
-
-
 Column(
 modifier = Modifier.fillMaxSize()
 ) {
@@ -131,6 +121,72 @@ modifier = Modifier.fillMaxSize()
         Day(listOf(),  "Вс"),
     ) // дни недели
 
+   /* val items = listOf(
+        Day(listOf( // четная
+            Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лабораторная работа","114"),
+            Lesson("14:55", "16:25","Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+        ),  "Пн",),
+        Day(listOf(
+            Lesson("10:50", "12:20","Егоров В.В.", "АРТИЛЛ. ТЕХНИКА","Лабораторная работа","СК-1"),
+            Lesson("12:40", "14:10","Маслов Д.В.", "АНАЛИЗ КОНСТР. АИУС","Практическое занятие","СК-14"),
+            Lesson("14:55", "16:25","Митюшов А.И.", "РАДИОФИЗИКА","Практическое занятие","115"),
+            Lesson("16:45", "18:15","Митюшов А.И.", "РАДИОФИЗИКА","Лекция","115"),
+        ),  "Вт"),
+        Day(listOf(
+            Lesson("10:50", "12:20","Перов Л.Д.", "РАДИОФИЗИКА","Лабораторная работа","251"),
+            Lesson("12:40", "14:10","Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
+            Lesson("14:55", "16:25","Бурковецкий К.А.;Никольченко Ю.А.", " РАКЕТН. ТЕХНИКА","Лабораторная работа","СК21; СК21а"),
+        ),  "Ср"),
+        Day(listOf(
+            Lesson("9:00", "10:30","Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+            Lesson("10:50", "12:20","Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
+            Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лекция","115"),
+            Lesson("14:55", "16:25","Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+        ),  "Чт",),
+        Day(listOf(
+            Lesson("10:50", "12:20","Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Лекция","440"),
+            Lesson("12:40", "14:10","Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Практическое занятие","440"),
+        ),  "Пт",),
+        Day(listOf(
+            Lesson("9:00", "10:30","Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Лекция","115"),
+            Lesson("10:50", "12:20","Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Практическое занятие","251"),
+        ),  "Сб"),
+        Day(listOf(),  "Вс"),
+
+        Day(listOf( // нечетная
+            Lesson("10:50", "12:20","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Практическое занятие","114"),
+            Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лабораторная работа","114"),
+            Lesson("14:55", "16:25","Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+        ),  "Пн",),
+        Day(listOf(
+            Lesson("10:50", "12:20","Егоров В.В.", "АРТИЛЛ. ТЕХНИКА","Лабораторная работа","СК-1"),
+            Lesson("12:40", "14:10","Маслов Д.В.", "АНАЛИЗ КОНСТР. АИУС","Практическое занятие","СК-14"),
+            Lesson("14:55", "16:25","Митюшов А.И.", "РАДИОФИЗИКА","Практическое занятие","115"),
+            Lesson("16:45", "18:15","Митюшов А.И.", "РАДИОФИЗИКА","Лекция","115"),
+        ),  "Вт"),
+        Day(listOf(
+            Lesson("10:50", "12:20","Перов Л.Д.", "РАДИОФИЗИКА","Лабораторная работа","251"),
+            Lesson("12:40", "14:10","Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
+            Lesson("14:55", "16:25","Авферонок С.Э.", " РАКЕТН. ТЕХНИКА","Лекция","313а"),
+        ),  "Ср"),
+        Day(listOf(
+            Lesson("9:00", "10:30","Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+            Lesson("10:50", "12:20","Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
+            Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лекция","115"),
+            Lesson("14:55", "16:25","Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+        ),  "Чт",),
+        Day(listOf(
+            Lesson("10:50", "12:20","Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Лекция","440"),
+            Lesson("12:40", "14:10","Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Практическое занятие","440"),
+        ),  "Пт",),
+        Day(listOf(
+            Lesson("9:00", "10:30","Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Лекция","115"),
+            Lesson("10:50", "12:20","Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Практическое занятие","251"),
+        ),  "Сб"),
+        Day(listOf(),  "Вс"),
+
+
+    ) // дни недели*/
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -143,12 +199,8 @@ modifier = Modifier.fillMaxSize()
         stateofpager = weekFinalDays[statepage.currentPage%7]
     }
 
-
     var prevday: Int
     var nextday: Int
-
-    //val page = remember { mutableStateOf(day.day - 1)}
-
 
 
     /*// старая линия дней
@@ -196,19 +248,13 @@ modifier = Modifier.fillMaxSize()
             statepage.animateScrollToPage( // анимация при нажатии на день недели календаря
                 page = if (prevday < nextday )
                     statepage.currentPage + nextday - prevday
-                else if (prevday > nextday)
+                else
                     statepage.currentPage - prevday + nextday
-                else return@launch)
+                )
         }
-
     },
-        selectedDayBackgroundColor = Blueee,
-        SwipeDayChange = {
-            day = weekFinalDays[statepage.currentPage - 7*5]
-
-            }
+        selectedDayBackgroundColor = Blueee
     )
-
 
 /*    Row( // старая версия столбцов пар
         modifier = Modifier
@@ -528,12 +574,12 @@ modifier = Modifier.fillMaxSize()
                             ) {
                                 Text(
                                     text = lesson.starttime,
-                                    fontSize = 20.sp,
+                                    fontSize = 13.sp,
                                     color = Color.LightGray,
                                 )
                                 Text(
                                     text = lesson.endtime,
-                                    fontSize = 20.sp,
+                                    fontSize = 13.sp,
                                     color = Color.LightGray
                                 )
                             }
@@ -549,13 +595,13 @@ modifier = Modifier.fillMaxSize()
 
                                 Text(
                                     text = lesson.typeOfLesson,
-                                    fontSize = 13.sp,
+                                    fontSize = 10.sp,
                                     color = Color.Gray,
                                     fontFamily = FontFamily.SansSerif
                                 )
                                 Text(
                                     text = lesson.discipline,
-                                    fontSize = 18.sp,
+                                    fontSize = 15.sp,
                                     color = Color.Black,
                                     fontFamily = FontFamily.Cursive
                                 )
@@ -574,7 +620,7 @@ modifier = Modifier.fillMaxSize()
 
                                     Text(
                                         text = lesson.teacher,
-                                        fontSize = 13.sp,
+                                        fontSize = 10.sp,
                                         color = Color.Gray,
                                         fontFamily = FontFamily.SansSerif,
                                         modifier = Modifier.padding(horizontal = 10.dp)
@@ -592,7 +638,7 @@ modifier = Modifier.fillMaxSize()
                                     )
                                     Text(
                                         text = lesson.auditory,
-                                        fontSize = 13.sp,
+                                        fontSize = 10.sp,
                                         color = Color.Gray,
                                         fontFamily = FontFamily.SansSerif,
                                         modifier = Modifier.padding(horizontal = 10.dp)
