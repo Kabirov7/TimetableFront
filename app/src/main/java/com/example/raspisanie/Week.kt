@@ -12,11 +12,15 @@ data class Day(
     var dayOfWeek: String,
 )
 
-
+data class LessonNumber
+    (
+        var starttime: String,
+        var endtime: String,
+        var number: String,
+    )
 data class Lesson
     (
     var starttime: String,
-    var endtime: String,
     var teacher: String,
     var discipline: String,
     var typeOfLesson: String,

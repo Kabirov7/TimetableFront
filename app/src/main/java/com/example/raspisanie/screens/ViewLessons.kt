@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -14,99 +15,121 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.raspisanie.Day
 import com.example.raspisanie.Lesson
+import com.example.raspisanie.LessonNumber
 import com.example.raspisanie.R
 import com.example.raspisanie.ui.theme.Blueee
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.mrerror.singleRowCalendar.DateUtils
 import com.mrerror.singleRowCalendar.SingleRowCalendar
-import com.mrerror.singleRowCalendar.weekFinalDays
-/*import com.SingleRowCalendar.SingleRowCalendar
-import com.mrerror.singleRowCalendar.weekFinalDays*/
+//import com.mrerror.singleRowCalendar.weekFinalDays
 import kotlinx.coroutines.launch
 import java.util.*
 
+val calendar = Calendar.getInstance(Locale.getDefault())
 var stateofpager: Date = Date()
-
+var weekFinalDays = DateUtils.getFutureDates(
+    6,
+    Calendar.getInstance().apply {
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        time = calendar.time})
+@Preview
 @Composable
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalPagerApi::class)
 fun ViewLessons()
 {
+    weekFinalDays = DateUtils.getFutureDates(
+        6,
+        Calendar.getInstance().apply {
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+            time = calendar.time})
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.9f)
             .background(Color.White),
-        verticalArrangement = Arrangement.SpaceBetween
+        //verticalArrangement = Arrangement.SpaceBetween
     ) {
+
+        val keys = listOf(
+            LessonNumber("9:00","10:30","1"),
+            LessonNumber("10:50","12:20","2"),
+            LessonNumber("12:40","14:10","3"),
+            LessonNumber("14:55", "16:25","4"),
+            LessonNumber("16:45", "18:15","5"),
+            LessonNumber("18:35","20:05","6"),
+        )
 
         val items = listOf(
             Day(listOf( // четная
-                Lesson("14:55", "16:25","Абсалямова И.А.", "ИН.ЯЗ.","Практическое занятие","309*"),
-                Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Практическое занятие","507*а"),
+                Lesson("14:55","Абсалямова И.А.", "ИН.ЯЗ.","Практическое занятие","309*"),
+                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Практическое занятие","507*а"),
             ),  "Пн",),
             Day(listOf(
-                Lesson("9:00", "10:30","Устиновский Г.С.", "СИСТЕМНОЕ ПО","Лекция","325*"),
-                Lesson("10:50", "12:20","Трилис А.В.", "ФИЗ.ОСН.МИКРОЭЛ","Лекция","324*"),
-                Lesson("12:40", "14:10","", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
+                Lesson("9:00", "Устиновский Г.С.", "СИСТЕМНОЕ ПО","Лекция","325*"),
+                Lesson("10:50", "Трилис А.В.", "ФИЗ.ОСН.МИКРОЭЛ","Лекция","324*"),
+                Lesson("12:40", "", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
             ),  "Вт"),
             Day(listOf(
-                Lesson("10:50", "12:20","Воробьева Е.Е.", "ОСН.СИСТ.АН.","Практическое занятие","259"),
-                Lesson("12:40", "14:10","Александрова Е.Б", "ВЫСШ.МАТЕМАТ.","Лекция","451"),
-                Lesson("14:55", "16:25","Живулин В.А.", "ФИЗИКА","Лекция","325"),
-                Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Лекция","429*"),
+                Lesson("10:50", "Воробьева Е.Е.", "ОСН.СИСТ.АН.","Практическое занятие","259"),
+                Lesson("12:40", "Александрова Е.Б", "ВЫСШ.МАТЕМАТ.","Лекция","451"),
+                Lesson("14:55", "Живулин В.А.", "ФИЗИКА","Лекция","325"),
+                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Лекция","429*"),
             ),  "Ср"),
             Day(listOf(
-                Lesson("14:55", "16:25","", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
-                Lesson("16:45", "18:15","Мажайцев Е.А.", "КОМП.ПРАКТИКУМ","Практическое занятие","219*а"),
+                Lesson("14:55", "", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
+                Lesson("16:45", "Мажайцев Е.А.", "КОМП.ПРАКТИКУМ","Практическое занятие","219*а"),
             ),  "Чт",),
             Day(listOf(
-                Lesson("10:50", "12:20","Волкова М.В.", "ФИЗ.ОСН.МИКРОЭЛ","Лабораторная работа","430"),
-                Lesson("12:40", "14:10","Щеглова А.В.", "ВЫСШ.МАТЕМАТ.","Практическое занятие","420*"),
+                Lesson("10:50", "Волкова М.В.", "ФИЗ.ОСН.МИКРОЭЛ","Лабораторная работа","430"),
+                Lesson("12:40", "Щеглова А.В.", "ВЫСШ.МАТЕМАТ.","Практическое занятие","420*"),
             ),  "Пт",),
             Day(listOf(),  "Сб"),
             Day(listOf(),  "Вс"),
 
 
             Day(listOf( // нечетная
-                Lesson("12:40", "14:10","Устиновский Г.С.", "СИСТЕМНОЕ ПО","Практическое занятие","258*"),
-                Lesson("14:55", "16:25","Абсалямова И.А.", "ИН.ЯЗ.","Практическое занятие","309*"),
-                Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Практическое занятие","507*а"),
+                Lesson("12:40", "Устиновский Г.С.", "СИСТЕМНОЕ ПО","Практическое занятие","258*"),
+                Lesson("14:55", "Абсалямова И.А.", "ИН.ЯЗ.","Практическое занятие","309*"),
+                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Практическое занятие","507*а"),
             ),  "Пн",),
             Day(listOf(
-                Lesson("9:00", "10:30","Устиновский Г.С.", "СИСТЕМНОЕ ПО","Лекция","325*"),
-                Lesson("10:50", "12:20","Трилис А.В.", "ФИЗ.ОСН.МИКРОЭЛ","Лекция","324*"),
-                Lesson("12:40", "14:10","", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
+                Lesson("9:00", "Устиновский Г.С.", "СИСТЕМНОЕ ПО","Лекция","325*"),
+                Lesson("10:50", "Трилис А.В.", "ФИЗ.ОСН.МИКРОЭЛ","Лекция","324*"),
+                Lesson("12:40", "", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
             ),  "Вт"),
             Day(listOf(
-                Lesson("10:50", "12:20","Дмитриева А.П.", "ПРАВОВЕДЕНИЕ","Практическое занятие","484"),
-                Lesson("12:40", "14:10","Александрова Е.Б", "ВЫСШ.МАТЕМАТ.","Лекция","451"),
-                Lesson("14:55", "16:25","Живулин В.А.", "ФИЗИКА","Лекция","325"),
-                Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Лекция","429*"),
-                Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Лекция","429*"),
-                Lesson("16:45", "18:15","Галайдин П.А.", "ТОЭ","Лекция","429*"),
+                Lesson("10:50", "Дмитриева А.П.", "ПРАВОВЕДЕНИЕ","Практическое занятие","484"),
+                Lesson("12:40", "Александрова Е.Б", "ВЫСШ.МАТЕМАТ.","Лекция","451"),
+                Lesson("14:55", "Живулин В.А.", "ФИЗИКА","Лекция","325"),
+                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Лекция","429*"),
+                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Лекция","429*"),
+                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Лекция","429*"),
             ),  "Ср"),
             Day(listOf(
-                Lesson("10:50", "12:20","Степанова О.Ю.", "ПРАВОВЕДЕНИЕ","Лекция","313"),
-                Lesson("12:40", "14:10","Воробьева Е.Е.", "ОСН.СИСТ.АН.","Лекция","315"),
-                Lesson("14:55", "16:25","", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
-                Lesson("16:45", "18:15","Мажайцев Е.А.", "КОМП.ПРАКТИКУМ","Практическое занятие","219*а"),
+                Lesson("10:50", "Степанова О.Ю.", "ПРАВОВЕДЕНИЕ","Лекция","313"),
+                Lesson("12:40", "Воробьева Е.Е.", "ОСН.СИСТ.АН.","Лекция","315"),
+                Lesson("14:55", "", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
+                Lesson("16:45", "Мажайцев Е.А.", "КОМП.ПРАКТИКУМ","Практическое занятие","219*а"),
             ),  "Чт",),
             Day(listOf(
-                Lesson("12:40", "14:10","Щеглова А.В.", "ВЫСШ.МАТЕМАТ.","Практическое занятие","420*"),
-                Lesson("14:55", "16:25","Лойко А.В.", "ТОЭ","Лабораторная работа","356*"),
-                Lesson("16:45", "18:15","Мажайцев Е.А.", "КОМП.ПРАКТИКУМ","Практическое занятие","258*")
+                Lesson("12:40", "Щеглова А.В.", "ВЫСШ.МАТЕМАТ.","Практическое занятие","420*"),
+                Lesson("14:55", "Лойко А.В.", "ТОЭ","Лабораторная работа","356*"),
+                Lesson("16:45", "Мажайцев Е.А.", "КОМП.ПРАКТИКУМ","Практическое занятие","258*")
             ),  "Пт",),
             Day(listOf(), "Сб"),
             Day(listOf(),  "Вс"),
         ) // дни недели
 
-        /* val items = listOf(
+         /*val items = listOf(
              Day(listOf( // четная
                  Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лабораторная работа","114"),
                  Lesson("14:55", "16:25","Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
@@ -179,10 +202,10 @@ fun ViewLessons()
 
         val statepage = rememberPagerState((day.day -1) + 7*5 )
 
-        if (weekFinalDays.isNotEmpty())
-        {
-            stateofpager = weekFinalDays[statepage.currentPage%7]
-        }
+        /*if (weekFinalDays.isNotEmpty())
+        {*/
+        stateofpager = weekFinalDays[statepage.currentPage%7]
+        //}
 
         var prevday: Int
         var nextday: Int
@@ -271,112 +294,174 @@ fun ViewLessons()
                 }
                 else
                 {
-                    for (lesson in items[currentPage % 14].listOfLessons)
+                    var i = 0
+                    for (lessonkey in keys)
                     {
-                        Card(
-                            shape = RoundedCornerShape(15.dp),
-                            elevation = 15.dp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(160.dp)
-                                .padding(vertical = 5.dp, horizontal = 10.dp)
-                                .clickable { }
-                            ,
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-
-                                // Время пары
-                                Column(
+                        if (i < items[currentPage % 14].listOfLessons.count())
+                        {
+                            val lesson =  items[currentPage % 14].listOfLessons[i]
+                            if (lessonkey.starttime == lesson.starttime)
+                            {
+                                Card(
+                                    shape = RoundedCornerShape(15.dp),
+                                    elevation = 15.dp,
                                     modifier = Modifier
-                                        .fillMaxWidth(0.2f)
-                                        .fillMaxHeight()
-                                        .border(width = 0.5.dp, Color.DarkGray)
-                                        .background(Blueee),
-                                    verticalArrangement = Arrangement.SpaceAround,
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                        .fillMaxWidth()
+                                        .height(160.dp)
+                                        .padding(vertical = 5.dp, horizontal = 10.dp)
+                                        .clickable { }
+                                    ,
                                 ) {
-                                    Text(
-                                        text = lesson.starttime,
-                                        fontSize = 13.sp,
-                                        color = Color.LightGray,
-                                    )
-                                    Text(
-                                        text = lesson.endtime,
-                                        fontSize = 13.sp,
-                                        color = Color.LightGray
-                                    )
-                                }
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
 
-                                // Описание пары
-                                Column(
+                                        // Время пары
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth(0.2f)
+                                                .fillMaxHeight()
+                                                .border(width = 0.5.dp, Color.DarkGray)
+                                                .background(Blueee),
+                                            verticalArrangement = Arrangement.SpaceAround,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Text(
+                                                text = lessonkey.starttime,
+                                                fontSize = 13.sp,
+                                                color = Color.LightGray,
+                                            )
+                                            Text(
+                                                text = lessonkey.number,
+                                                fontSize = 13.sp,
+                                                color = Color.LightGray
+                                            )
+                                            Text(
+                                                text = lessonkey.endtime,
+                                                fontSize = 13.sp,
+                                                color = Color.LightGray
+                                            )
+                                        }
+
+                                        // Описание пары
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .padding(horizontal = 10.dp),
+                                            verticalArrangement = Arrangement.SpaceEvenly,
+                                            horizontalAlignment = Alignment.Start
+                                        ) {
+
+                                            Text(
+                                                text = lesson.typeOfLesson,
+                                                fontSize = 10.sp,
+                                                color = Color.Gray,
+                                                fontFamily = FontFamily.SansSerif
+                                            )
+                                            Text(
+                                                text = lesson.discipline,
+                                                fontSize = 15.sp,
+                                                color = Color.Black,
+                                                fontFamily = FontFamily.Cursive
+                                            )
+
+
+                                            Row(
+                                                horizontalArrangement = Arrangement.SpaceBetween
+                                            ) {
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.prepod),
+                                                    contentDescription = null,
+                                                    modifier = Modifier
+                                                        .size(width = 20.dp, height = 20.dp),
+                                                    contentScale = ContentScale.Crop
+                                                )
+
+                                                Text(
+                                                    text = lesson.teacher,
+                                                    fontSize = 10.sp,
+                                                    color = Color.Gray,
+                                                    fontFamily = FontFamily.SansSerif,
+                                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                                )
+                                            }
+
+                                            Row(
+                                                horizontalArrangement = Arrangement.SpaceBetween
+                                            ) {
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.aud),
+                                                    contentDescription = null,
+                                                    modifier = Modifier
+                                                        .size(15.dp),
+                                                )
+                                                Text(
+                                                    text = lesson.auditory,
+                                                    fontSize = 10.sp,
+                                                    color = Color.Gray,
+                                                    fontFamily = FontFamily.SansSerif,
+                                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                                )
+                                            }
+
+
+
+                                        }
+
+                                    }
+                                }
+                                i++
+                            }
+                            else
+                            {
+                                Card(
+                                    shape = RoundedCornerShape(10.dp),
                                     modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(horizontal = 10.dp),
-                                    verticalArrangement = Arrangement.SpaceEvenly,
-                                    horizontalAlignment = Alignment.Start
+                                        .fillMaxWidth()
+                                        .height(80.dp)
+                                        .padding(vertical = 5.dp, horizontal = 10.dp)
+                                    ,
+                                    backgroundColor = Color.LightGray
                                 ) {
-
-                                    Text(
-                                        text = lesson.typeOfLesson,
-                                        fontSize = 10.sp,
-                                        color = Color.Gray,
-                                        fontFamily = FontFamily.SansSerif
-                                    )
-                                    Text(
-                                        text = lesson.discipline,
-                                        fontSize = 15.sp,
-                                        color = Color.Black,
-                                        fontFamily = FontFamily.Cursive
-                                    )
-
-
                                     Row(
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                        modifier = Modifier.fillMaxWidth()
                                     ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.prepod),
-                                            contentDescription = null,
+                                        // Время пары
+                                        Column(
                                             modifier = Modifier
-                                                .size(width = 20.dp, height = 20.dp),
-                                            contentScale = ContentScale.Crop
-                                        )
+                                                .fillMaxWidth(0.2f)
+                                                .fillMaxHeight()
+                                                .border(width = 0.5.dp, Color.DarkGray)
+                                                .background(Blueee),
+                                            verticalArrangement = Arrangement.SpaceAround,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Text(
+                                                text = lessonkey.starttime,
+                                                fontSize = 13.sp,
+                                                color = Color.LightGray,
+                                            )
+                                            Text(
+                                                text = lessonkey.number,
+                                                fontSize = 13.sp,
+                                                color = Color.LightGray
+                                            )
+                                            Text(
+                                                text = lessonkey.endtime,
+                                                fontSize = 13.sp,
+                                                color = Color.LightGray
+                                            )
+                                        }
 
-                                        Text(
-                                            text = lesson.teacher,
-                                            fontSize = 10.sp,
-                                            color = Color.Gray,
-                                            fontFamily = FontFamily.SansSerif,
-                                            modifier = Modifier.padding(horizontal = 10.dp)
-                                        )
                                     }
-
-                                    Row(
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.aud),
-                                            contentDescription = null,
-                                            modifier = Modifier
-                                                .size(15.dp),
-                                        )
-                                        Text(
-                                            text = lesson.auditory,
-                                            fontSize = 10.sp,
-                                            color = Color.Gray,
-                                            fontFamily = FontFamily.SansSerif,
-                                            modifier = Modifier.padding(horizontal = 10.dp)
-                                        )
-                                    }
-
-
-
                                 }
-
                             }
                         }
+                        else continue
+
                     }
+
+
                 }
 
 

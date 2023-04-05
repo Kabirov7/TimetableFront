@@ -29,11 +29,12 @@ import androidx.compose.ui.unit.sp
 import com.example.raspisanie.R
 import com.example.raspisanie.Week
 import com.example.raspisanie.screens.stateofpager
+import com.example.raspisanie.screens.weekFinalDays
 import com.mrerror.singleRowCalendar.DateUtils.getFutureDates
 import com.mrerror.singleRowCalendar.SingleRowCalendarDefaults.Grey500
 import java.util.*
 
-var weekFinalDays = mutableListOf<Date>()
+
 var weekWasSwiped = false
 
 @Composable
@@ -110,7 +111,7 @@ fun WeekHeader(
     val fDayName = DateUtils.getDayNumber(weekFinalDate)
     val fMonthName = DateUtils.getMonthName(weekFinalDate)
     val fYearName = DateUtils.getYear2Letters(weekFinalDate)
-    var numberOfWeek = if  (DateUtils.getNumberOfWeek(weekFinalDate).toInt() % 2 == 0) "нечетная" else "четная"
+    val numberOfWeek = if  (DateUtils.getNumberOfWeek(weekFinalDate).toInt() % 2 == 0) "нечетная" else "четная"
 
 
 
@@ -195,7 +196,7 @@ fun WeekDaysHeader(
     else
         selectedDate.time = stateofpager.time
 
-    weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = firstDayDate })
+    //weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = firstDayDate })
     val interactionSource = remember { MutableInteractionSource() }
 
     Row(
