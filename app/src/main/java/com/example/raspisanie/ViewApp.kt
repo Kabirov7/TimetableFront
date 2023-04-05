@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.layout.BoxScopeInstance.align
-//import androidx.compose.foundation.layout.ColumnScopeInstance.align
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -28,10 +26,6 @@ import com.example.raspisanie.navigation.BottomItem
 import com.example.raspisanie.screens.ViewLessons
 import com.example.raspisanie.ui.theme.Blueee
 import com.google.accompanist.pager.*
-import com.mrerror.singleRowCalendar.SingleRowCalendar
-import com.mrerror.singleRowCalendar.weekFinalDays
-import dev.chrisbanes.snapper.ExperimentalSnapperApi
-import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -97,23 +91,6 @@ fun ViewApp()
             {
                 Text("Profile", Modifier.fillMaxSize())
             }
-        }
-    }
-
-
-    NavHost(navController = navController, startDestination = "home")
-    {
-        composable("home")
-        {
-            ViewLessons()
-        }
-        composable("search")
-        {
-            Text("Search", Modifier.fillMaxSize())
-        }
-        composable("profile")
-        {
-            Text("Profile", Modifier.fillMaxSize())
         }
     }
 
