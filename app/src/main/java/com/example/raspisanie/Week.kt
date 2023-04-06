@@ -1,8 +1,5 @@
 package com.example.raspisanie
 
-import java.time.DayOfWeek
-import java.time.Month
-
 data class Week(
     var list: List<Day>,
 )
@@ -12,7 +9,7 @@ data class Day(
     var dayOfWeek: String,
 )
 
-data class LessonNumber
+data class DayTime
     (
         var starttime: String,
         var endtime: String,

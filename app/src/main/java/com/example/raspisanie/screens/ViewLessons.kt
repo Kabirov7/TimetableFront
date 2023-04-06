@@ -1,17 +1,34 @@
 package com.example.raspisanie.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.forEachGesture
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
+//import androidx.compose.foundation.layout.ColumnScopeInstance.align
+//import androidx.compose.foundation.layout.BoxScopeInstance.align
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -20,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.raspisanie.Day
 import com.example.raspisanie.Lesson
-import com.example.raspisanie.LessonNumber
+import com.example.raspisanie.DayTime
 import com.example.raspisanie.R
 import com.example.raspisanie.ui.theme.Blueee
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -28,6 +45,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.mrerror.singleRowCalendar.DateUtils
 import com.mrerror.singleRowCalendar.SingleRowCalendar
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 //import com.mrerror.singleRowCalendar.weekFinalDays
 import kotlinx.coroutines.launch
 import java.util.*
@@ -39,12 +58,43 @@ var weekFinalDays = DateUtils.getFutureDates(
     Calendar.getInstance().apply {
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
         time = calendar.time})
+
+enum class ButtonState { Pressed, Idle }
+fun Modifier.bounceClick() = composed {
+    var buttonState by remember { mutableStateOf(ButtonState.Idle) }
+    val scale by animateFloatAsState(if (buttonState == ButtonState.Pressed) 0.9f else 1f)
+
+    this
+        .graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+        }
+        .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = {  }
+        )
+        .pointerInput(buttonState) {
+            awaitPointerEventScope {
+                buttonState = if (buttonState == ButtonState.Pressed) {
+                    waitForUpOrCancellation()
+                    ButtonState.Idle
+                } else {
+                    awaitFirstDown(false)
+                    ButtonState.Pressed
+                }
+            }
+        }
+}
+
+
 @Preview
 @Composable
-@SuppressLint("CoroutineCreationDuringComposition")
+@SuppressLint("CoroutineCreationDuringComposition", "SuspiciousIndentation")
 @OptIn(ExperimentalPagerApi::class)
 fun ViewLessons()
 {
+
     weekFinalDays = DateUtils.getFutureDates(
         6,
         Calendar.getInstance().apply {
@@ -55,17 +105,18 @@ fun ViewLessons()
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.9f)
-            .background(Color.White),
+            //.background(Color.White),
         //verticalArrangement = Arrangement.SpaceBetween
     ) {
 
         val keys = listOf(
-            LessonNumber("9:00","10:30","1"),
-            LessonNumber("10:50","12:20","2"),
-            LessonNumber("12:40","14:10","3"),
-            LessonNumber("14:55", "16:25","4"),
-            LessonNumber("16:45", "18:15","5"),
-            LessonNumber("18:35","20:05","6"),
+            DayTime("9:00","10:30","1"),
+            DayTime("10:50","12:20","2"),
+            DayTime("12:40","14:10","3"),
+            DayTime("14:10","14:55","|"),
+            DayTime("14:55", "16:25","4"),
+            DayTime("16:45", "18:15","5"),
+            DayTime("18:35","20:05","6"),
         )
 
         val items = listOf(
@@ -105,13 +156,12 @@ fun ViewLessons()
                 Lesson("9:00", "Устиновский Г.С.", "СИСТЕМНОЕ ПО","Лекция","325*"),
                 Lesson("10:50", "Трилис А.В.", "ФИЗ.ОСН.МИКРОЭЛ","Лекция","324*"),
                 Lesson("12:40", "", "ЭК ПО ФК И СПОРТУ","Практическое занятие",""),
+                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Лекция","429*"),
             ),  "Вт"),
             Day(listOf(
                 Lesson("10:50", "Дмитриева А.П.", "ПРАВОВЕДЕНИЕ","Практическое занятие","484"),
                 Lesson("12:40", "Александрова Е.Б", "ВЫСШ.МАТЕМАТ.","Лекция","451"),
                 Lesson("14:55", "Живулин В.А.", "ФИЗИКА","Лекция","325"),
-                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Лекция","429*"),
-                Lesson("16:45", "Галайдин П.А.", "ТОЭ","Лекция","429*"),
                 Lesson("16:45", "Галайдин П.А.", "ТОЭ","Лекция","429*"),
             ),  "Ср"),
             Day(listOf(
@@ -131,65 +181,65 @@ fun ViewLessons()
 
          /*val items = listOf(
              Day(listOf( // четная
-                 Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лабораторная работа","114"),
-                 Lesson("14:55", "16:25","Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+                 Lesson("12:40", "Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лабораторная работа","114"),
+                 Lesson("14:55", "Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
              ),  "Пн",),
              Day(listOf(
-                 Lesson("10:50", "12:20","Егоров В.В.", "АРТИЛЛ. ТЕХНИКА","Лабораторная работа","СК-1"),
-                 Lesson("12:40", "14:10","Маслов Д.В.", "АНАЛИЗ КОНСТР. АИУС","Практическое занятие","СК-14"),
-                 Lesson("14:55", "16:25","Митюшов А.И.", "РАДИОФИЗИКА","Практическое занятие","115"),
-                 Lesson("16:45", "18:15","Митюшов А.И.", "РАДИОФИЗИКА","Лекция","115"),
+                 Lesson("10:50", "Егоров В.В.", "АРТИЛЛ. ТЕХНИКА","Лабораторная работа","СК-1"),
+                 Lesson("12:40", "Маслов Д.В.", "АНАЛИЗ КОНСТР. АИУС","Практическое занятие","СК-14"),
+                 Lesson("14:55", "Митюшов А.И.", "РАДИОФИЗИКА","Практическое занятие","115"),
+                 Lesson("16:45", "Митюшов А.И.", "РАДИОФИЗИКА","Лекция","115"),
              ),  "Вт"),
              Day(listOf(
-                 Lesson("10:50", "12:20","Перов Л.Д.", "РАДИОФИЗИКА","Лабораторная работа","251"),
-                 Lesson("12:40", "14:10","Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
-                 Lesson("14:55", "16:25","Бурковецкий К.А.;Никольченко Ю.А.", " РАКЕТН. ТЕХНИКА","Лабораторная работа","СК21; СК21а"),
+                 Lesson("10:50", "Перов Л.Д.", "РАДИОФИЗИКА","Лабораторная работа","251"),
+                 Lesson("12:40", "Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
+                 Lesson("14:55", "Бурковецкий К.А.;Никольченко Ю.А.", " РАКЕТН. ТЕХНИКА","Лабораторная работа","СК21; СК21а"),
              ),  "Ср"),
              Day(listOf(
-                 Lesson("9:00", "10:30","Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
-                 Lesson("10:50", "12:20","Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
-                 Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лекция","115"),
-                 Lesson("14:55", "16:25","Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+                 Lesson("9:00", "Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+                 Lesson("10:50", "Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
+                 Lesson("12:40", "Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лекция","115"),
+                 Lesson("14:55", "Гусев А.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
              ),  "Чт",),
              Day(listOf(
-                 Lesson("10:50", "12:20","Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Лекция","440"),
-                 Lesson("12:40", "14:10","Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Практическое занятие","440"),
+                 Lesson("10:50", "Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Лекция","440"),
+                 Lesson("12:40", "Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Практическое занятие","440"),
              ),  "Пт",),
              Day(listOf(
-                 Lesson("9:00", "10:30","Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Лекция","115"),
-                 Lesson("10:50", "12:20","Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Практическое занятие","251"),
+                 Lesson("9:00", "Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Лекция","115"),
+                 Lesson("10:50", "Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Практическое занятие","251"),
              ),  "Сб"),
              Day(listOf(),  "Вс"),
 
              Day(listOf( // нечетная
-                 Lesson("10:50", "12:20","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Практическое занятие","114"),
-                 Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лабораторная работа","114"),
-                 Lesson("14:55", "16:25","Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+                 Lesson("10:50", "Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Практическое занятие","114"),
+                 Lesson("12:40", "Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лабораторная работа","114"),
+                 Lesson("14:55", "Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
              ),  "Пн",),
              Day(listOf(
-                 Lesson("10:50", "12:20","Егоров В.В.", "АРТИЛЛ. ТЕХНИКА","Лабораторная работа","СК-1"),
-                 Lesson("12:40", "14:10","Маслов Д.В.", "АНАЛИЗ КОНСТР. АИУС","Практическое занятие","СК-14"),
-                 Lesson("14:55", "16:25","Митюшов А.И.", "РАДИОФИЗИКА","Практическое занятие","115"),
-                 Lesson("16:45", "18:15","Митюшов А.И.", "РАДИОФИЗИКА","Лекция","115"),
+                 Lesson("10:50", "Егоров В.В.", "АРТИЛЛ. ТЕХНИКА","Лабораторная работа","СК-1"),
+                 Lesson("12:40", "Маслов Д.В.", "АНАЛИЗ КОНСТР. АИУС","Практическое занятие","СК-14"),
+                 Lesson("14:55", "Митюшов А.И.", "РАДИОФИЗИКА","Практическое занятие","115"),
+                 Lesson("16:45", "Митюшов А.И.", "РАДИОФИЗИКА","Лекция","115"),
              ),  "Вт"),
              Day(listOf(
-                 Lesson("10:50", "12:20","Перов Л.Д.", "РАДИОФИЗИКА","Лабораторная работа","251"),
-                 Lesson("12:40", "14:10","Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
-                 Lesson("14:55", "16:25","Авферонок С.Э.", " РАКЕТН. ТЕХНИКА","Лекция","313а"),
+                 Lesson("10:50", "Перов Л.Д.", "РАДИОФИЗИКА","Лабораторная работа","251"),
+                 Lesson("12:40", "Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
+                 Lesson("14:55", "Авферонок С.Э.", " РАКЕТН. ТЕХНИКА","Лекция","313а"),
              ),  "Ср"),
              Day(listOf(
-                 Lesson("9:00", "10:30","Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
-                 Lesson("10:50", "12:20","Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
-                 Lesson("12:40", "14:10","Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лекция","115"),
-                 Lesson("14:55", "16:25","Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+                 Lesson("9:00", "Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
+                 Lesson("10:50", "Оськин И.А. (Егоренков Л.С.)", " ИСТ. ТЕХН. И ВООР","Практическое занятие","440"),
+                 Lesson("12:40", "Крылов В.А.", "Т. ОСН. РАДИОТЕХН","Лекция","115"),
+                 Lesson("14:55", "Крылов В.А.", "АНАЛИЗ КОНСТР. АИУС","Лабораторная работа","СК-14"),
              ),  "Чт",),
              Day(listOf(
-                 Lesson("10:50", "12:20","Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Лекция","440"),
-                 Lesson("12:40", "14:10","Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Практическое занятие","440"),
+                 Lesson("10:50", "Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Лекция","440"),
+                 Lesson("12:40", "Грецова Е.Б.", "ФИЗИКА ГОР. И ВЗР.","Практическое занятие","440"),
              ),  "Пт",),
              Day(listOf(
-                 Lesson("9:00", "10:30","Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Лекция","115"),
-                 Lesson("10:50", "12:20","Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Практическое занятие","251"),
+                 Lesson("9:00", "Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Лекция","115"),
+                 Lesson("10:50", "Павлов А.С.", "ЧИСЛ. МЕТ. МОД. пр","Практическое занятие","251"),
              ),  "Сб"),
              Day(listOf(),  "Вс"),
 
@@ -211,24 +261,22 @@ fun ViewLessons()
         var nextday: Int
 
         SingleRowCalendar(onSelectedDayChange = { // верхний календарь
-
             prevday = day.day
             if (prevday == 0) prevday = 7
             day = it
             nextday = day.day
             if (nextday == 0) nextday = 7
 
+            if (prevday != nextday)
             coroutineScope.launch {
                 statepage.animateScrollToPage( // анимация при нажатии на день недели календаря
-                    page = if (prevday < nextday )
-                        statepage.currentPage + nextday - prevday
-                    else
-                        statepage.currentPage - prevday + nextday
+                    page = statepage.currentPage + nextday - prevday
                 )
             }
         },
             selectedDayBackgroundColor = Blueee
         )
+
 
         HorizontalPager( // новый пейджер дней недели
             count = 7*10,
@@ -237,7 +285,6 @@ fun ViewLessons()
             modifier = Modifier
                 .weight(10f)
         ) { currentPage ->
-
 
             Column(
                 modifier = Modifier
@@ -295,6 +342,7 @@ fun ViewLessons()
                 else
                 {
                     var i = 0
+                    var sleeporwindow = false
                     for (lessonkey in keys)
                     {
                         if (i < items[currentPage % 14].listOfLessons.count())
@@ -302,6 +350,7 @@ fun ViewLessons()
                             val lesson =  items[currentPage % 14].listOfLessons[i]
                             if (lessonkey.starttime == lesson.starttime)
                             {
+                                sleeporwindow = true
                                 Card(
                                     shape = RoundedCornerShape(15.dp),
                                     elevation = 15.dp,
@@ -309,7 +358,9 @@ fun ViewLessons()
                                         .fillMaxWidth()
                                         .height(160.dp)
                                         .padding(vertical = 5.dp, horizontal = 10.dp)
-                                        .clickable { }
+                                        .clickable {
+                                        }
+                                        .bounceClick()
                                     ,
                                 ) {
                                     Row(
@@ -322,7 +373,8 @@ fun ViewLessons()
                                                 .fillMaxWidth(0.2f)
                                                 .fillMaxHeight()
                                                 .border(width = 0.5.dp, Color.DarkGray)
-                                                .background(Blueee),
+                                                .background(Blueee)
+                                               ,
                                             verticalArrangement = Arrangement.SpaceAround,
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
@@ -334,7 +386,18 @@ fun ViewLessons()
                                             Text(
                                                 text = lessonkey.number,
                                                 fontSize = 13.sp,
-                                                color = Color.LightGray
+                                                color = Color.Black,
+                                                modifier = Modifier
+                                                    .align(Alignment.Start)
+                                                    .padding(horizontal = 15.dp)
+                                                    .drawBehind {
+                                                    drawCircle(
+                                                        color = Color.White, radius = 25f
+                                                    )
+                                                        drawLine(color = Color.White,this.size.center.minus(
+                                                            Offset(0f,200f)),this.size.center.plus(
+                                                            Offset(0f,200f)))
+                                                }
                                             )
                                             Text(
                                                 text = lessonkey.endtime,
@@ -415,14 +478,44 @@ fun ViewLessons()
                             else
                             {
                                 Card(
-                                    shape = RoundedCornerShape(10.dp),
+                                    elevation = 15.dp,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(80.dp)
                                         .padding(vertical = 5.dp, horizontal = 10.dp)
                                     ,
-                                    backgroundColor = Color.LightGray
                                 ) {
+                                    if (lessonkey.number != "|")
+                                    {
+                                        if (sleeporwindow == false)
+                                        Image(
+                                        painter = painterResource(id = R.drawable.sleep),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.FillWidth,
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        colorFilter = ColorFilter.lighting(Color.LightGray,Color.Gray))
+                                        else
+                                        Image(
+                                            painter = painterResource(id = R.drawable.window),
+                                            contentDescription = null,
+                                            contentScale = ContentScale.FillWidth,
+                                            modifier = Modifier
+                                                .fillMaxSize(),
+                                            colorFilter = ColorFilter.lighting(Color.Gray,Color.Gray)
+                                    )
+                                    }
+                                    else
+                                    {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.obed),
+                                            contentDescription = null,
+                                            contentScale = ContentScale.FillWidth,
+                                            modifier = Modifier
+                                                .fillMaxSize(),
+                                        )
+                                    }
+
                                     Row(
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
@@ -444,7 +537,18 @@ fun ViewLessons()
                                             Text(
                                                 text = lessonkey.number,
                                                 fontSize = 13.sp,
-                                                color = Color.LightGray
+                                                color = Color.Black,
+                                                modifier = Modifier
+                                                    .align(Alignment.Start)
+                                                    .padding(horizontal = 15.dp)
+                                                    .drawBehind {
+                                                        drawCircle(
+                                                            color = Color.White, radius = 25f
+                                                        )
+                                                        drawLine(color = Color.White,this.size.center.minus(
+                                                            Offset(0f,200f)),this.size.center.plus(
+                                                            Offset(0f,200f)))
+                                                    }
                                             )
                                             Text(
                                                 text = lessonkey.endtime,

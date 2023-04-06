@@ -1,14 +1,17 @@
 package com.mrerror.singleRowCalendar
 
-import android.widget.Button
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.swipeable
 /*import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text*/
@@ -20,14 +23,12 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.raspisanie.R
-import com.example.raspisanie.Week
+import com.example.raspisanie.screens.calendar
 import com.example.raspisanie.screens.stateofpager
 import com.example.raspisanie.screens.weekFinalDays
 import com.mrerror.singleRowCalendar.DateUtils.getFutureDates
@@ -51,42 +52,48 @@ fun SingleRowCalendar(
     @DrawableRes prevDrawableRes: Int = R.drawable.baseline_keyboard_double_arrow_left_24,
     onSelectedDayChange: (Date) -> Unit,
     ) {
-    val calendar = Calendar.getInstance(Locale.getDefault())
-    var selectedDate by rememberSaveable { mutableStateOf(calendar.time) }
-    calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-    var currentDate by rememberSaveable { mutableStateOf(calendar.time) }
+    val calendar1 = calendar
+    var selectedDate by rememberSaveable { mutableStateOf(calendar1.time) }
+    calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+    var currentDate by rememberSaveable { mutableStateOf(calendar1.time) }
 
-    Column(modifier) {
+    Card(
+        shape = RoundedCornerShape(30.dp), modifier = Modifier.padding(7.dp)
+    ) {
+        Column(modifier.background(Color.White),) {
+            WeekHeader(firstDayDate = currentDate,
+                iconsTintColor = iconsTintColor,
+                headTextColor = headTextColor,
+                headTextStyle = headTextStyle,
+                nextDrawableRes = nextDrawableRes,
+                prevDrawableRes = prevDrawableRes,
+                onNextWeekClicked = {
+                    calendar1.time = it
+                    currentDate = it
+                    weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
+                },
+                onPrevWeekClicked = {
+                    calendar1.time = it
+                    currentDate = it
+                    weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
+                },
+            )
 
-        WeekHeader(firstDayDate = currentDate,
-            iconsTintColor = iconsTintColor,
-            headTextColor = headTextColor,
-            headTextStyle = headTextStyle,
-            nextDrawableRes = nextDrawableRes,
-            prevDrawableRes = prevDrawableRes,
-            onNextWeekClicked = {
-                calendar.time = it
-                currentDate = it
-            },
-            onPrevWeekClicked = {
-                calendar.time = it
-                currentDate = it
-            },
-        )
+            WeekDaysHeader(selectedDayBackgroundColor = selectedDayBackgroundColor,
+                selectedDayTextColor = selectedDayTextColor,
+                dayNumTextColor = dayNumTextColor,
+                dayTextColor = dayTextColor,
+                firstDayDate = currentDate,
+                selectedDate = selectedDate,
+                onSelectDay = { day ->
+                    calendar1.time = day
+                    selectedDate = day
+                    onSelectedDayChange(day)
+                },
+            )
+        }
 
-        WeekDaysHeader(selectedDayBackgroundColor = selectedDayBackgroundColor,
-            selectedDayTextColor = selectedDayTextColor,
-            dayNumTextColor = dayNumTextColor,
-            dayTextColor = dayTextColor,
-            firstDayDate = currentDate,
-            selectedDate = selectedDate,
-            onSelectDay = { day ->
-                calendar.time = day
-                selectedDate = day
-                onSelectedDayChange(day)
-                stateofpager.time = day.time
-            },
-        )
+
     }
 }
 
@@ -122,15 +129,14 @@ fun WeekHeader(
         horizontalArrangement = Arrangement.SpaceBetween
 
     ) {
-        /*if (stateofpager.day == 1 && weekWasSwiped==true)
+        /*if (stateofpager.day == 1)
         {
             val c = Calendar.getInstance()
             c.time = weekFinalDate
             c.add(Calendar.DATE, 1)
             val nextWeekFirstDay = c.time
             onNextWeekClicked(nextWeekFirstDay)
-        }
-        else if (stateofpager.day!=1 && stateofpager.day!=0) weekWasSwiped = false*/
+        }*/
 
         Image(
             modifier = Modifier.clickable {
