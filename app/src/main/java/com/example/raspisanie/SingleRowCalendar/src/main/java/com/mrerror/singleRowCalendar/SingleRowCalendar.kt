@@ -1,5 +1,6 @@
 package com.mrerror.singleRowCalendar
 
+import android.widget.CalendarView
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,9 +26,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.example.raspisanie.R
+import com.example.raspisanie.screens.bounceClick
 import com.example.raspisanie.screens.calendar
 import com.example.raspisanie.screens.stateofpager
 import com.example.raspisanie.screens.weekFinalDays
@@ -37,6 +41,7 @@ import java.util.*
 
 
 var weekWasSwiped = false
+var calopened = mutableStateOf(false)
 
 @Composable
 fun SingleRowCalendar(
@@ -57,41 +62,136 @@ fun SingleRowCalendar(
     calendar1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
     var currentDate by rememberSaveable { mutableStateOf(calendar1.time) }
 
+
     Card(
         shape = RoundedCornerShape(30.dp), modifier = Modifier.padding(7.dp)
     ) {
-        Column(modifier.background(Color.White),) {
-            WeekHeader(firstDayDate = currentDate,
-                iconsTintColor = iconsTintColor,
-                headTextColor = headTextColor,
-                headTextStyle = headTextStyle,
-                nextDrawableRes = nextDrawableRes,
-                prevDrawableRes = prevDrawableRes,
-                onNextWeekClicked = {
-                    calendar1.time = it
-                    currentDate = it
-                    weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
-                },
-                onPrevWeekClicked = {
-                    calendar1.time = it
-                    currentDate = it
-                    weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
-                },
-            )
+        if (!calopened.value)
+        {
+            weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
+            Column(modifier.background(Color.White),) {
+                WeekHeader(firstDayDate = currentDate,
+                    iconsTintColor = iconsTintColor,
+                    headTextColor = headTextColor,
+                    headTextStyle = headTextStyle,
+                    nextDrawableRes = nextDrawableRes,
+                    prevDrawableRes = prevDrawableRes,
+                    onNextWeekClicked = {
+                        calendar1.time = it
+                        currentDate = it
+                        weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
+                    },
+                    onPrevWeekClicked = {
+                        calendar1.time = it
+                        currentDate = it
+                        weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
+                    },
+                )
 
-            WeekDaysHeader(selectedDayBackgroundColor = selectedDayBackgroundColor,
-                selectedDayTextColor = selectedDayTextColor,
-                dayNumTextColor = dayNumTextColor,
-                dayTextColor = dayTextColor,
-                firstDayDate = currentDate,
-                selectedDate = selectedDate,
-                onSelectDay = { day ->
-                    calendar1.time = day
-                    selectedDate = day
-                    onSelectedDayChange(day)
-                },
-            )
+                WeekDaysHeader(selectedDayBackgroundColor = selectedDayBackgroundColor,
+                    selectedDayTextColor = selectedDayTextColor,
+                    dayNumTextColor = dayNumTextColor,
+                    dayTextColor = dayTextColor,
+                    firstDayDate = currentDate,
+                    selectedDate = selectedDate,
+                    onSelectDay = { day ->
+                        calendar1.time = day
+                        selectedDate = day
+                        onSelectedDayChange(day)
+                    },
+                )
+            }
         }
+        else
+        {
+            Column(modifier.background(Color.White), verticalArrangement = Arrangement.SpaceBetween) {
+                WeekHeader(firstDayDate = currentDate,
+                    iconsTintColor = iconsTintColor,
+                    headTextColor = headTextColor,
+                    headTextStyle = headTextStyle,
+                    nextDrawableRes = nextDrawableRes,
+                    prevDrawableRes = prevDrawableRes,
+                    onNextWeekClicked = {
+                        calendar1.time = it
+                        currentDate = it
+                        weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
+                    },
+                    onPrevWeekClicked = {
+                        calendar1.time = it
+                        currentDate = it
+                        weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = currentDate})
+                    },
+                )
+
+               WeekDaysHeader(selectedDayBackgroundColor = selectedDayBackgroundColor,
+                    selectedDayTextColor = selectedDayTextColor,
+                    dayNumTextColor = dayNumTextColor,
+                    dayTextColor = dayTextColor,
+                    firstDayDate = currentDate,
+                    selectedDate = selectedDate,
+                    onSelectDay = { day ->
+                        calendar1.time = day
+                        selectedDate = day
+                        onSelectedDayChange(day)
+                    },
+                )
+
+                val c = Calendar.getInstance()
+                c.time = weekFinalDays.last()
+                c.add(Calendar.DATE, 1)
+                var prevWeekFirstDay = c.time
+                weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = prevWeekFirstDay})
+
+                WeekDaysHeader(selectedDayBackgroundColor = selectedDayBackgroundColor,
+                    selectedDayTextColor = selectedDayTextColor,
+                    dayNumTextColor = dayNumTextColor,
+                    dayTextColor = dayTextColor,
+                    firstDayDate = prevWeekFirstDay,
+                    selectedDate = selectedDate,
+                    onSelectDay = { day ->
+                        calendar1.time = day
+                        selectedDate = day
+                        onSelectedDayChange(day)
+                    },
+                )
+                c.time = weekFinalDays.last()
+                c.add(Calendar.DATE, 1)
+                prevWeekFirstDay = c.time
+                weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = prevWeekFirstDay})
+
+                WeekDaysHeader(selectedDayBackgroundColor = selectedDayBackgroundColor,
+                    selectedDayTextColor = selectedDayTextColor,
+                    dayNumTextColor = dayNumTextColor,
+                    dayTextColor = dayTextColor,
+                    firstDayDate = prevWeekFirstDay,
+                    selectedDate = selectedDate,
+                    onSelectDay = { day ->
+                        calendar1.time = day
+                        selectedDate = day
+                        onSelectedDayChange(day)
+                    },
+                )
+                c.time = weekFinalDays.last()
+                c.add(Calendar.DATE, 1)
+                prevWeekFirstDay = c.time
+                weekFinalDays = getFutureDates(6, Calendar.getInstance().apply { time = prevWeekFirstDay})
+
+                WeekDaysHeader(selectedDayBackgroundColor = selectedDayBackgroundColor,
+                    selectedDayTextColor = selectedDayTextColor,
+                    dayNumTextColor = dayNumTextColor,
+                    dayTextColor = dayTextColor,
+                    firstDayDate = prevWeekFirstDay,
+                    selectedDate = selectedDate,
+                    onSelectDay = { day ->
+                        calendar1.time = day
+                        selectedDate = day
+                        onSelectedDayChange(day)
+                    },
+                )
+
+            }
+        }
+
 
 
     }
@@ -139,13 +239,15 @@ fun WeekHeader(
         }*/
 
         Image(
-            modifier = Modifier.clickable {
+            modifier = Modifier.bounceClick(press = 0.7f,
+            onclick = {
                 val c = Calendar.getInstance()
                 c.time = firstDayDate
                 c.add(Calendar.DATE, -7)
                 val prevWeekFirstDay = c.time
                 onPrevWeekClicked(prevWeekFirstDay)
-            },
+            })
+            ,
             painter = painterResource(id = prevDrawableRes),
             contentDescription = "",
             colorFilter = ColorFilter.tint(iconsTintColor)
@@ -153,7 +255,9 @@ fun WeekHeader(
         Column(
             modifier = Modifier
                 .width(220.dp)
-                .clickable { },
+                .bounceClick(press = 0.94f, {
+                    calopened.value = !calopened.value
+                }),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -172,13 +276,13 @@ fun WeekHeader(
         }
 
         Image(
-            modifier = Modifier.clickable {
+            modifier = Modifier.bounceClick(press = 0.7f, onclick =  {
                 val c = Calendar.getInstance()
                 c.time = weekFinalDate
                 c.add(Calendar.DATE, 1)
                 val nextWeekFirstDay = c.time
                 onNextWeekClicked(nextWeekFirstDay)
-            },
+            }),
             painter = painterResource(id = nextDrawableRes),
             contentDescription = "",
             colorFilter = ColorFilter.tint(iconsTintColor)

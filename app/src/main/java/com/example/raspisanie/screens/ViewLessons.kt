@@ -1,6 +1,10 @@
 package com.example.raspisanie.screens
 
 import android.annotation.SuppressLint
+import android.os.Build
+import android.view.ContextThemeWrapper
+import android.widget.CalendarView
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
@@ -15,7 +19,9 @@ import androidx.compose.foundation.layout.*
 //import androidx.compose.foundation.layout.BoxScopeInstance.align
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,6 +41,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.raspisanie.Day
 import com.example.raspisanie.Lesson
 import com.example.raspisanie.DayTime
@@ -49,6 +58,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 //import com.mrerror.singleRowCalendar.weekFinalDays
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 val calendar = Calendar.getInstance(Locale.getDefault())
@@ -60,9 +72,9 @@ var weekFinalDays = DateUtils.getFutureDates(
         time = calendar.time})
 
 enum class ButtonState { Pressed, Idle }
-fun Modifier.bounceClick() = composed {
+fun Modifier.bounceClick(press: Float, onclick: () -> Unit) = composed {
     var buttonState by remember { mutableStateOf(ButtonState.Idle) }
-    val scale by animateFloatAsState(if (buttonState == ButtonState.Pressed) 0.9f else 1f)
+    val scale by animateFloatAsState(if (buttonState == ButtonState.Pressed) press else 1f)
 
     this
         .graphicsLayer {
@@ -72,7 +84,7 @@ fun Modifier.bounceClick() = composed {
         .clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
-            onClick = {  }
+            onClick = onclick
         )
         .pointerInput(buttonState) {
             awaitPointerEventScope {
@@ -88,12 +100,15 @@ fun Modifier.bounceClick() = composed {
 }
 
 
+
+
 @Preview
 @Composable
 @SuppressLint("CoroutineCreationDuringComposition", "SuspiciousIndentation")
 @OptIn(ExperimentalPagerApi::class)
 fun ViewLessons()
 {
+
 
     weekFinalDays = DateUtils.getFutureDates(
         6,
@@ -104,9 +119,8 @@ fun ViewLessons()
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
-            //.background(Color.White),
-        //verticalArrangement = Arrangement.SpaceBetween
+            .fillMaxHeight(0.935f)
+
     ) {
 
         val keys = listOf(
@@ -252,10 +266,7 @@ fun ViewLessons()
 
         val statepage = rememberPagerState((day.day -1) + 7*5 )
 
-        /*if (weekFinalDays.isNotEmpty())
-        {*/
         stateofpager = weekFinalDays[statepage.currentPage%7]
-        //}
 
         var prevday: Int
         var nextday: Int
@@ -282,8 +293,6 @@ fun ViewLessons()
             count = 7*10,
             state = statepage,
             verticalAlignment = Alignment.Top,
-            modifier = Modifier
-                .weight(10f)
         ) { currentPage ->
 
             Column(
@@ -358,9 +367,7 @@ fun ViewLessons()
                                         .fillMaxWidth()
                                         .height(160.dp)
                                         .padding(vertical = 5.dp, horizontal = 10.dp)
-                                        .clickable {
-                                        }
-                                        .bounceClick()
+                                        .bounceClick(press = 0.98f,{})
                                     ,
                                 ) {
                                     Row(

@@ -28,6 +28,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.raspisanie.navigation.BottomItem
 import com.example.raspisanie.screens.ViewLessons
+import com.example.raspisanie.screens.ViewLogin
+import com.example.raspisanie.screens.ViewProfile
 import com.example.raspisanie.ui.theme.Blueee
 import com.google.accompanist.pager.*
 import java.util.*
@@ -78,15 +80,9 @@ fun ViewApp()
                     )
                 }
             }
-        }
+        }, backgroundColor = Color.LightGray
     )
     {
-        /*Image(
-            painter = painterResource(id = R.drawable.fon11),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.Crop)*/
         NavHost(navController = navController, startDestination = "home")
         {
             composable("home")
@@ -99,7 +95,11 @@ fun ViewApp()
             }
             composable("profile")
             {
-                Text("Profile", Modifier.fillMaxSize())
+                ViewProfile(navController)
+            }
+            composable("login")
+            {
+                ViewLogin()
             }
         }
     }
